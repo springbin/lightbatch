@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status="INFO">
+    <Appenders>
+        <Console name ="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d{DEFAULT}][%p][%30c{1}][Line:%-3L][%t-%T %sn] - %m%n"/>
+        </Console>
+        <RollingFile name="utillog" fileName="d:\\log\\utillog.log" bufferedIO="false" bufferSize="8192"
+            ImmediateFlush="true"
+            filePattern="d:\\log\\${date:yyyy-MM}\\util-log-%d{yyyy-MM-dd-HH}-%i.log.gz">
+                <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss,SSS}][%p][%c{1}][line:%L][%t-%T] %m%n"/>
+                <Policies>
+                    <TimeBasedTriggeringPolicy interval="24"/>
+                    <SizeBasedTriggeringPolicy size="200M"/>
+                </Policies>
+                <DefaultRolloverStrategy max="100"/>
+        </RollingFile>
+
+        <RollingFile name="syslog" fileName="d:\\log\\syslog.log" bufferedIO="false" bufferSize="8192"
+                     ImmediateFlush="true"
+                     filePattern="d:\\log\\${date:yyyy-MM}\\sys-log-%d{yyyy-MM-dd-HH}-%i.log.gz">
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss,SSS}][%p][%c{1}][line:%L][%t-%T] %m%n"/>
+            <Policies>
+                <!--interval属性用来指定多久滚动一次，取决于filePattern配置，filePattern日期格式精确到哪一位，interval也精确到哪一个单位-->
+                <TimeBasedTriggeringPolicy interval="24"/>
+                <SizeBasedTriggeringPolicy size="200M"/>
+            </Policies>
+            <DefaultRolloverStrategy max="100"/>
+        </RollingFile>
+
+    </Appenders>
+    <Loggers>
+        <Logger name="com.bin.util" level="INFO" additivity="false">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="utillog"/>
+        </Logger>
+
+        <Root name="root" level="INFO">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="syslog"/>
+        </Root>
+    </Loggers>
+</Configuration>
